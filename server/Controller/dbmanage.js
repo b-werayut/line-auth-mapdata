@@ -101,7 +101,7 @@ exports.mappingData = async (req, res) => {
 
     const upsertLineUser = await prisma.LineUser.upsert({
       where: { UserId: user.UserId },
-      update: { UserIdLine: userId },
+      update: { UserIdLine: userId, ModifiedDate: now },
       create: {
         UserIdLine: userId,
         LineToken: {
