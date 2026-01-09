@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js">
+        < /script> </head >
+        <
+        body >
+            <
+            script >
+            async function main() {
+                await liff.init({
+                    liffId: "YOUR_LIFF_ID"
+                });
+
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                    return;
+                }
+
+                const idToken = liff.getIDToken();
+                const urlParams = new URLSearchParams(window.location.search);
+                const nonce = urlParams.get('nonce');
+
+                await fetch('/liff/callback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        idToken,
+                        nonce
+                    })
+                });
+
+                alert('เชื่อมบัญชีสำเร็จ');
+                liff.closeWindow();
+            }
+
+        main();
+    </script>
+    </body>
+
+</html>
