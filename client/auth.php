@@ -788,6 +788,14 @@
         animation: slideUp 0.5s ease 0.4s both;
     }
 
+    .errordata-title {
+        color: var(--text-light);
+        font-size: 26px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        animation: slideUp 0.5s ease 0.4s both;
+    }
+
     .error-message {
         color: var(--text-muted);
         font-size: 15px;
@@ -924,7 +932,7 @@
         <div class="error-icon">
             <i class="bi bi-x-lg"></i>
         </div>
-        <h2 class="error-title">ข้อมูลไม่ถูกต้อง</h2>
+        <h2 class="errordata-title">ข้อมูลไม่ถูกต้อง</h2>
         <p class="error-message" id="errordataMessage">
             กรุณาลองใหม่อีกครั้ง
         </p>
@@ -963,6 +971,7 @@
             const submitBtn = document.getElementById("submitBtn");
             const successOverlay = document.getElementById("successOverlay");
             const errordataOverlay = document.getElementById("errordataOverlay");
+            const errorText = document.querySelector(".errordata-title");
             const errorOverlay = document.getElementById("errorOverlay");
 
             const phoneInput = document.getElementById("phone");
@@ -1038,26 +1047,35 @@
                             .then((response) => response.json())
                             .then((data) => {
 
-                                if (data.status == "success") {
+                                const hideOverlay = (overlay, delay = 3000) => {
+                                    setTimeout(() => overlay.classList.remove("show"), delay);
+                                };
+
+                                const showError = (message = "ข้อมูลไม่ถูกต้อง") => {
+                                    errorText.textContent = message;
+                                    errordataOverlay.classList.add("show");
+                                    hideOverlay(errordataOverlay);
+                                };
+
+                                const errorMessages = {
+                                    errordata: "ข้อมูลไม่ถูกต้อง",
+                                    errorlastname: "นามสกุลไม่ถูกต้อง",
+                                    errorphonenumber: "เบอร์โทรไม่ถูกต้อง",
+                                    erroremail: "อีเมล์ไม่ถูกต้อง"
+                                };
+
+                                if (data.status === "success") {
                                     successOverlay.classList.add("show");
+
                                     setTimeout(() => {
                                         successOverlay.classList.remove("show");
                                         form.reset();
-                                        inputs.forEach((i) => i.classList.remove("is-valid"));
-
+                                        inputs.forEach(i => i.classList.remove("is-valid"));
                                         window.close();
                                     }, 3000);
-                                }
 
-                                if (data.status == "errordata") {
-                                    errordataOverlay.classList.add("show");
-                                    setTimeout(() => {
-                                        errordataOverlay.classList.remove("show");
-                                        // form.reset();
-                                        // inputs.forEach((i) => i.classList.remove("is-valid"));
-
-                                        window.close();
-                                    }, 3000);
+                                } else if (errorMessages[data.status]) {
+                                    showError(errorMessages[data.status]);
                                 }
 
                                 console.log("Status:", data.status);
