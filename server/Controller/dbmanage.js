@@ -4,7 +4,7 @@ exports.mappingData = async (req, res) => {
   try {
     const { userId, lastName, phone, email } = req.body;
 
-    if (!userId || !lastName || !phone || !email) {
+    if (!lastName || !phone || !email) {
       console.log("Information is Empty!");
       return res
         .status(400)
@@ -13,12 +13,62 @@ exports.mappingData = async (req, res) => {
 
     // console.log("Payload Data:", { userId, lastName, phone, email });
 
-    const user = await prisma.Users.findFirst({
-      where: {
-        Lastname: lastName,
-        PhoneNumber: phone,
-        Email: email,
+    const getLastName = await prisma.Users.findFirst({
+      where: { Lastname: lastName },
+      select: {
+        UserId: true,
+        Lastname: true,
+        PhoneNumber: true,
+        Email: true,
       },
+    });
+
+    const getPhone = await prisma.Users.findFirst({
+      where: { PhoneNumber: phone },
+      select: {
+        UserId: true,
+        Lastname: true,
+        PhoneNumber: true,
+        Email: true,
+      },
+    });
+
+    const getEmail = await prisma.Users.findFirst({
+      where: { Email: email },
+      select: {
+        UserId: true,
+        Lastname: true,
+        PhoneNumber: true,
+        Email: true,
+      },
+    });
+
+    if (!getLastName) {
+      console.log("Lastname does not match!");
+      return res.json({
+        status: "errorlastname",
+        msg: "Lastname does not match!",
+      });
+    }
+
+    if (!getPhone) {
+      console.log("Phonenumber does not match!");
+      return res.json({
+        status: "errorphonenumber",
+        msg: "Phonenumber does not match!",
+      });
+    }
+
+    if (!getEmail) {
+      console.log("Email does not match!");
+      return res.json({
+        status: "erroremail",
+        msg: "Email does not match!",
+      });
+    }
+
+    const user = await prisma.Users.findFirst({
+      where: { Lastname: lastName },
       select: {
         UserId: true,
         Lastname: true,
@@ -31,8 +81,6 @@ exports.mappingData = async (req, res) => {
       console.log("Data does not match!");
       return res.json({ status: "errordata", msg: "Data does not match!" });
     }
-
-    console.log("Matched User:", user);
 
     const now = new Date();
     const thaiDateTime = now.toLocaleString("th-TH", {
