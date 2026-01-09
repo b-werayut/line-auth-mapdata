@@ -1035,7 +1035,7 @@
                             email: document.getElementById("email").value,
                         };
 
-                        const apiUrl = "https://71727b231631.ngrok-free.app/api/liff/register";
+                        const apiUrl = "https://30815539cb05.ngrok-free.app/api/liff/register";
 
                         fetch(apiUrl, {
                             method: "POST",

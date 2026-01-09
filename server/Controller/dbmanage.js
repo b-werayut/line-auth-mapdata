@@ -4,6 +4,15 @@ exports.mappingData = async (req, res) => {
   try {
     const { userId, lastName, phone, email } = req.body;
 
+    if (!userId) {
+      console.log("UserId Not Found!");
+      return res
+        .status(400)
+        .json({ status: "error", msg: "UserId Not Found!" });
+    }
+
+    console.log("UserId is:", userId);
+
     if (!lastName || !phone || !email) {
       console.log("Information is Empty!");
       return res
@@ -68,7 +77,11 @@ exports.mappingData = async (req, res) => {
     }
 
     const user = await prisma.Users.findFirst({
-      where: { Lastname: lastName },
+      where: {
+        Lastname: getLastName.userId,
+        PhoneNumber: getPhone.userId,
+        Email: getEmail.userId,
+      },
       select: {
         UserId: true,
         Lastname: true,
