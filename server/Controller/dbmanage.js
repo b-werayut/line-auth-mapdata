@@ -78,9 +78,9 @@ exports.mappingData = async (req, res) => {
 
     const user = await prisma.Users.findFirst({
       where: {
-        Lastname: getLastName.userId,
-        PhoneNumber: getPhone.userId,
-        Email: getEmail.userId,
+        Lastname: lastName,
+        PhoneNumber: phone,
+        Email: email,
       },
       select: {
         UserId: true,
@@ -91,8 +91,10 @@ exports.mappingData = async (req, res) => {
     });
 
     if (!user) {
-      console.log("Data does not match!");
-      return res.json({ status: "errordata", msg: "Data does not match!" });
+      return res.json({
+        status: "errordata",
+        msg: "ข้อมูลไม่ตรงกัน",
+      });
     }
 
     const now = new Date();

@@ -1035,7 +1035,7 @@
                             email: document.getElementById("email").value,
                         };
 
-                        const apiUrl = "https://30815539cb05.ngrok-free.app/api/liff/register";
+                        const apiUrl = "https://www.centrecities.com/api/liff/register";
 
                         fetch(apiUrl, {
                             method: "POST",
@@ -1072,7 +1072,7 @@
                                         form.reset();
                                         inputs.forEach(i => i.classList.remove("is-valid"));
                                         window.close();
-                                    }, 3000);
+                                    }, 7000);
 
                                 } else if (errorMessages[data.status]) {
                                     showError(errorMessages[data.status]);
