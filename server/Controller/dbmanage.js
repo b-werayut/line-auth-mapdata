@@ -35,7 +35,7 @@ exports.mappingData = async (req, res) => {
     if (!getLastName) {
       console.log("Lastname does not match!");
       return res.json({
-        status: "error",
+        status: "1",
         msg: "Lastname does not match!",
       });
     }
@@ -45,7 +45,7 @@ exports.mappingData = async (req, res) => {
     const getPhone = await prisma.Users.findFirst({
       where: {
         PhoneNumber: phone,
-        UserId: uniqeUserId,
+        UserId: uniqeUserId
       },
       select: {
         UserId: true,
@@ -58,7 +58,7 @@ exports.mappingData = async (req, res) => {
     if (!getPhone) {
       console.log("Phonenumber does not match!");
       return res.json({
-        status: "error",
+        status: "2",
         msg: "Phonenumber does not match!",
       });
     }
@@ -66,7 +66,7 @@ exports.mappingData = async (req, res) => {
     const getEmail = await prisma.Users.findFirst({
       where: {
         Email: email,
-        UserId: uniqeUserId,
+        UserId: uniqeUserId
       },
       select: {
         UserId: true,
@@ -79,7 +79,7 @@ exports.mappingData = async (req, res) => {
     if (!getEmail) {
       console.log("Email does not match!");
       return res.json({
-        status: "error",
+        status: "3",
         msg: "Email does not match!",
       });
     }
@@ -100,7 +100,7 @@ exports.mappingData = async (req, res) => {
 
     if (!user) {
       return res.json({
-        status: "errordata",
+        status: "4",
         msg: "ข้อมูลไม่ตรงกัน",
       });
     }
@@ -143,7 +143,7 @@ exports.mappingData = async (req, res) => {
 
     console.log("Upserted LineUser Success:", upsertLineUser);
 
-    res.json({ status: "success", data: { userId, lastName, phone, email } });
+    res.json({ status: "5", data: { userId, lastName, phone, email } });
   } catch (err) {
     console.error("Server Error:", err);
     res.status(500).json({ status: "error", msg: "Internal server error" });
