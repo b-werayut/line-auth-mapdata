@@ -35,13 +35,18 @@ exports.mappingData = async (req, res) => {
     if (!getLastName) {
       console.log("Lastname does not match!");
       return res.json({
-        status: "errorlastname",
+        status: "error",
         msg: "Lastname does not match!",
       });
     }
 
+    const uniqeUserId = getLastName.UserId;
+
     const getPhone = await prisma.Users.findFirst({
-      where: { PhoneNumber: phone },
+      where: {
+        PhoneNumber: phone,
+        UserId: uniqeUserId,
+      },
       select: {
         UserId: true,
         Lastname: true,
@@ -53,13 +58,16 @@ exports.mappingData = async (req, res) => {
     if (!getPhone) {
       console.log("Phonenumber does not match!");
       return res.json({
-        status: "errorphonenumber",
+        status: "error",
         msg: "Phonenumber does not match!",
       });
     }
 
     const getEmail = await prisma.Users.findFirst({
-      where: { Email: email },
+      where: {
+        Email: email,
+        UserId: uniqeUserId,
+      },
       select: {
         UserId: true,
         Lastname: true,
@@ -71,7 +79,7 @@ exports.mappingData = async (req, res) => {
     if (!getEmail) {
       console.log("Email does not match!");
       return res.json({
-        status: "erroremail",
+        status: "error",
         msg: "Email does not match!",
       });
     }
